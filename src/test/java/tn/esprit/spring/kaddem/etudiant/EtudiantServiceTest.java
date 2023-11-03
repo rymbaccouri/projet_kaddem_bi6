@@ -2,11 +2,13 @@ package tn.esprit.spring.kaddem.etudiant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.spring.kaddem.entities.*;
 import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.DepartementRepository;
@@ -21,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class EtudiantServiceTest {
 
     @InjectMocks
@@ -41,7 +43,7 @@ public class EtudiantServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
-/*
+
     @Test
 
     public void testAddEtudiant() {
@@ -74,7 +76,7 @@ public class EtudiantServiceTest {
 
     }
 
- */
+
    @Test
     public void testEditEtudiant() {
 
@@ -101,7 +103,7 @@ public class EtudiantServiceTest {
     }
 
 
-/*
+
     @Test
     public void testRemoveEtudiant() {
 
@@ -131,12 +133,12 @@ public class EtudiantServiceTest {
 
         Mockito.verify(etudiantRepository).delete(savedEtudiant);
 
-//        Optional<Etudiant> removedEtudiant = etudiantRepository.findById(savedEtudiant.getIdEtudiant());
-//        assertFalse(removedEtudiant.isPresent());
+      Optional<Etudiant> removedEtudiant = etudiantRepository.findById(savedEtudiant.getIdEtudiant());
+       assertFalse(removedEtudiant.isPresent());
 
 
 
-    } */
+    }
 
 
 
