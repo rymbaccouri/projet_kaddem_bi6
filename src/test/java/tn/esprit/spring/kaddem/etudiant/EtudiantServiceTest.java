@@ -35,6 +35,7 @@ public class EtudiantServiceTest {
     private EtudiantRepository etudiantRepository;
 
     @Test
+    //
     public void testAddEtudiant() {
         Etudiant etudiant = new Etudiant( "rym", "baccouri", Option.GAMIX);
         etudiant.setNomE("rym");
