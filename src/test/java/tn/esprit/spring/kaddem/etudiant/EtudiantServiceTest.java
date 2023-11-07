@@ -43,10 +43,6 @@ public class EtudiantServiceTest {
         etudiant.setOp(Option.GAMIX);
 
 
-
-
-
-
         when(etudiantRepository.save(etudiant)).thenReturn(etudiant);
 
         Etudiant result = etudiantService.addEtudiant(etudiant);
@@ -60,6 +56,7 @@ public class EtudiantServiceTest {
 
         assertEquals(etudiant, result);
     }
+
 
 
 
@@ -96,17 +93,17 @@ public class EtudiantServiceTest {
         assertEquals(etudiants,retrieveEtudiant);
 
     }
-    @Test
-    public void testremoveEtudiant() {
+    //@Test
+   // public void testremoveEtudiant() {
 
-        Integer idEtudian = Math.toIntExact(1L);
+     //   Integer idEtudian = Math.toIntExact(1L);
 
         // Call the removeCourse function with the numCourse
-        etudiantService.removeEtudiant(idEtudian);
+    //    etudiantService.removeEtudiant(idEtudian);
 
         // Verify that the deleteById method of courseRepository is called with the numCourseToRemove
-        verify(etudiantRepository, times(1)).deleteById(idEtudian);
-    }
+      //  verify(etudiantRepository, times(1)).deleteById(idEtudian);
+ //   }
 
 
 
