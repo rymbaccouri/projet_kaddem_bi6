@@ -40,6 +40,26 @@ pipeline {
                 sh 'mvn deploy -DskipTests' // Add the -DskipTests option to skip tests during deployment
             }
         }
+        stage("Docker Image"){
+              steps{
+                sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
+              }
+            }
+            stage('Deploy Docker Image') {
+                  steps {
+                    withCredentials([string(credentialsId: 'pass', variable: 'DOCKER_PASSWORD')]) {
+                      sh '''
+                        docker login -u baccouri -p $DOCKER_PASSWORD
+                        docker push baccouri/projet_kaddem_bi6-1.0
+                      '''
+                    }
+                  }
+                }
+                stage('Docker Compose') {
+                      steps {
+                        sh 'docker-compose up -d'
+                      }
+                    }
     }
 }
 
