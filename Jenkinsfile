@@ -29,17 +29,17 @@ pipeline {
             }
         }
 
-        stage('Junit / Mockito') {
-            steps {
-                sh 'mvn test -DskipTests' // Add the -DskipTests option to skip running tests
-            }
-        }
-        
-        stage('Nexus Deployment') {
-            steps {
-                sh 'mvn deploy -DskipTests' // Add the -DskipTests option to skip tests during deployment
-            }
-        }
+stage('Junit / Mockito') {
+    steps {
+        sh 'mvn test'
+    }
+}
+
+stage('Nexus Deployment') {
+    steps {
+        sh 'mvn deploy' 
+    }
+}
         stage("Docker Image"){
               steps{
                 sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
