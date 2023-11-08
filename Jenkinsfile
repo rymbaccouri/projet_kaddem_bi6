@@ -42,13 +42,13 @@ stage('Nexus Deployment') {
 }
         stage("Docker Image"){
               steps{
-                sh "docker build -t baccouri/kaddem-0.0.1.jar ."
+                sh "docker build -t baccouri/kaddem-0.0.1 ."
               }
             }
        stage("Docker HUB"){
       steps{
         sh "docker login u=baccouri -p=docker123  "
-        sh " docker push -baccouri/kaddem-0.0.1.jar "
+        sh " docker push -baccouri/kaddem-0.0.1 "
       }
     }
                 stage('Docker Compose') {
