@@ -13,7 +13,7 @@ services:
   gestion-station-ski:
     depends_on:
       - mysqldb
-    image: baccouri/projet_kaddem_bi6-1.0
+    image: baccouri/kaddem-0.0.1.jar
     restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: ""
