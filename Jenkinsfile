@@ -47,7 +47,7 @@ stage('Nexus Deployment') {
             }
             stage('Deploy Docker Image') {
                   steps {
-                    withCredentials([string(credentialsId: 'pdw')]) {
+                    withCredentials([string(credentialsId: 'mdp')]) {
                       sh '''
                         docker login 
                         docker push baccouri/projet_kaddem_bi6-1.0
