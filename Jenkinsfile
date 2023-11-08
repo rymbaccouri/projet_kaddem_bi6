@@ -59,7 +59,7 @@ stage('Nexus Deployment') {
    		}
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker elemejri/alpine:1.0.0 '
+   		    sh 'docker push elemejri/alpine:1.0.0 '
    			}
    	    post {
    		always {
