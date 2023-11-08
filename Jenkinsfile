@@ -46,13 +46,10 @@ stage('Nexus Deployment') {
               }
             }
 
-stage('Deploy Docker Image') {
-      steps {
-      
-           sh "docker login -u  username -p login "
-           sh " docker push baccouri/kaddem-0.0.1 "
-    
-        }
+stage("Docker HUB"){
+      steps{
+        sh "docker login -u  username -p login"
+        sh " docker push -baccouri/kaddem-0.0.1.jar "
       }
     }
                 stage('Docker Compose') {
