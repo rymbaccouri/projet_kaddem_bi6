@@ -45,10 +45,15 @@ stage('Nexus Deployment') {
                 sh "docker build -t baccouri/kaddem-0.0.1 ."
               }
             }
-       stage("Docker HUB"){
-      steps{
-        sh " docker login  "
-        sh " docker push -baccouri/kaddem-0.0.1 "
+      Ahmed Hfaiedh
+stage('Deploy Docker Image') {
+      steps {
+        withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
+          sh '''
+            docker login -u baccouri -p $DOCKER_PASSWORD
+            docker push baccouri/kaddem-0.0.1
+          '''
+        }
       }
     }
                 stage('Docker Compose') {
