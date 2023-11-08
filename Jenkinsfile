@@ -45,7 +45,7 @@ stage('Nexus Deployment') {
 }
         stage('Docker Login') {
             steps {
-		sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
+		sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" --password-stdin="dockerhub" '
 			}
 		}
 
