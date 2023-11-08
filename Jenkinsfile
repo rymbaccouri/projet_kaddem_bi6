@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage("Git") {
             steps {
-                sh 'git checkout gestion_etudiant '
+                sh 'git checkout gestion_etudiant'
                 sh 'git pull origin gestion_etudiant'
             }
         }
@@ -20,7 +20,7 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-        
+
         stage('MVN SONARQUBE') {
             steps {
                 script {
@@ -29,36 +29,39 @@ pipeline {
             }
         }
 
-stage('Junit / Mockito') {
-    steps {
-        sh 'mvn test'
-    }
-}
-
-stage('Nexus Deployment') {
-    steps {
-        sh 'mvn deploy' 
-    }
-}
-        stage("Docker Image"){
-              steps{
-                sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
-              }
+        stage('Junit / Mockito') {
+            steps {
+                sh 'mvn test'
             }
-            stage('Deploy Docker Image') {
+        }
+
+        stage('Nexus Deployment') {
+            steps {
+                sh 'mvn deploy'
+            }
+        }
+
+        stage("Docker Image") {
+            steps {
+                sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
+            }
+        }
+
+        stage('Deploy Docker Image') {
             steps {
                 withCredentials([string(credentialsId: 'mdp')]) {
-                
-                        sh 'docker login
-                        sh 'docker push baccouri/projet_kaddem_bi6-1.0'
-                    
-                  }
-                
-                stage('Docker Compose') {
-                      steps {
-                        sh 'docker-compose up -d'
-                      }
+                    script {
+                        sh "docker login -u baccouri -p \$DOCKER_PASSWORD"
+                        sh "docker push baccouri/projet_kaddem_bi6-1.0"
                     }
+                }
+            }
+        }
+
+        stage('Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+            }
+        }
     }
 }
-
