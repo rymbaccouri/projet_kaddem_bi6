@@ -48,7 +48,7 @@ stage('Nexus Deployment') {
  	stage('Build docker image'){
                steps{
                    script{
-                       sh 'docker build -t elemejri/projet_kaddem_bi6-1.0 .'
+                       sh 'docker build -t elemejri/alpine:1.0.0 .'
                    }
                }
            }
@@ -59,7 +59,7 @@ stage('Nexus Deployment') {
    		}
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker elemejri/projet_kaddem_bi6-1.0'
+   		    sh 'docker elemejri/alpine:1.0.0 '
    			}
    	    post {
    		always {
