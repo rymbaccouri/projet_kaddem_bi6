@@ -43,17 +43,33 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-        stage('Docker Login') {
-            steps {
-		sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" --password-stdin="dockerhub" '
-			}
-		}
 
-        stage("Docker Image"){
-              steps{
-                sh 'docker build -t elemejri/projet_kaddem_bi6-1.0 .'
-              }
-            }
+
+ 	stage('Build docker image'){
+               steps{
+                   script{
+                       sh 'docker build -t elemejri/projet_kaddem_bi6-1.0 .'
+                   }
+               }
+           }
+   stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
+   			}
+   		}
+   	 stage('Push DockerHub') {
+                steps {
+   		    sh 'docker elemejri/projet_kaddem_bi6-1.0'
+   			}
+   	    post {
+   		always {
+   			sh 'docker logout'
+   		}
+           	}
+     }
+
+
+
 
     }
 }
