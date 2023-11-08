@@ -49,7 +49,7 @@ stage('Nexus Deployment') {
                   steps {
                     withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
                       sh '''
-                        docker login -u baccouri -p $DOCKER_PASSWORD
+                        docker login -u baccouri-p $DOCKER_PASSWORD
                         docker push baccouri/projet_kaddem_bi6-1.0
                       '''
                     }
