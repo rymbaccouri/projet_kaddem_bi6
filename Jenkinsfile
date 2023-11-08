@@ -47,7 +47,7 @@ stage('Nexus Deployment') {
             }
        stage("Docker HUB"){
       steps{
-        sh "docker login u=baccouri -p=docker123  "
+        sh "docker login -u baccouri -p "docker123"  "
         sh " docker push -baccouri/kaddem-0.0.1 "
       }
     }
