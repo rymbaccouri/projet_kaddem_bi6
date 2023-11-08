@@ -46,15 +46,18 @@ stage('Nexus Deployment') {
               }
             }
             stage('Deploy Docker Image') {
-                  steps {
-                    withCredentials([string(credentialsId:'mdp')]) {
-                      sh '''
-                        docker login 
-                        docker push baccouri/projet_kaddem_bi6-1.0
-                      '''
+            steps {
+                withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
+                    script {
+                        // Docker login with provided credentials
+                        sh 'docker login -u baccouri -p $DOCKER_PASSWORD'
+                    }
+                }
+                // Push the Docker image to the registry
+                sh 'docker push baccouri/projet_kaddem_bi6-1.0'
                     }
                   }
-                }
+                
                 stage('Docker Compose') {
                       steps {
                         sh 'docker-compose up -d'
