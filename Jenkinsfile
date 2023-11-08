@@ -51,7 +51,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'mdp')]) {
                     script {
-                        sh "docker login -u baccouri -p \$DOCKER_PASSWORD"
+                        sh "docker login 
                         sh "docker push baccouri/projet_kaddem_bi6-1.0"
                     }
                 }
