@@ -43,7 +43,11 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-
+        stage('Docker Login') {
+            steps {
+		sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
+			}
+		}
 
         stage("Docker Image"){
               steps{
