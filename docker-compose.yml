@@ -10,7 +10,7 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  gestion-station-ski:
+  gestion-Contrat:
     build: .
     depends_on:
       - mysqldb

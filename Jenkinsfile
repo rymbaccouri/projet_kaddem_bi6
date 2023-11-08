@@ -28,7 +28,7 @@ pipeline {
         // Étape pour compiler le projet avec Maven
         script {
 
-            sh "mvn sonar:sonar -Dsonar.login=squ_04772088a51c9d458dc6577e12e10cb07f50c16b"
+            sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
         }
     }
 }
