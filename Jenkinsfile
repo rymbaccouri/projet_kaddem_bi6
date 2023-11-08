@@ -42,7 +42,7 @@ stage('Nexus Deployment') {
 }
         stage("Docker Image"){
               steps{
-                sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
+                sh "docker build -t baccouri/kaddem-0.0.1.jar ."
               }
             }
             stage('Deploy Docker Image') {
@@ -50,7 +50,7 @@ stage('Nexus Deployment') {
                     withCredentials([string(credentialsId: 'mdp')]) {
                       sh '''
                         docker login 
-                        docker push baccouri/projet_kaddem_bi6-1.0
+                        docker push baccouri/kaddem-0.0.1.jar
                       '''
                     }
                   }
