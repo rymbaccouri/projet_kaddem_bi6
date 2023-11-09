@@ -50,7 +50,7 @@ stage('Docker Login') {
     steps {
         withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
             script {
-                sh "echo \$DOCKER_PASSWORD | docker login -u baccouri --password-stdin"
+                sh "docker login -u baccouri -p \$DOCKER_PASSWORD"
             }
         }
     }
@@ -66,6 +66,7 @@ stage('Push DockerHub') {
         }
     }
 }
+
 
 
                 stage('Docker Compose') {
