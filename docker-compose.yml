@@ -14,7 +14,7 @@ services:
       - MYSQL_PASSWORD=0000
 
   spring_app:
-    image: mahasmaali/alpine
+    image: mahasmaali/alpine:1.0.0
     container_name: alpine
     restart: on-failure
     environment:
