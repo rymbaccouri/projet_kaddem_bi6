@@ -37,6 +37,11 @@ pipeline {
                 echo'laching units test ...'
                 sh 'mvn test'
             }
+             post {
+                  always {
+                         junit '**/target/surefire-reports/TEST*.xml'
+                            }
+                        }
         }
 stage('Nexus Deployment') {
     steps {
@@ -53,14 +58,14 @@ stage('Nexus Deployment') {
 stage('Build docker image'){
                steps{
                    script{
-                       sh 'docker build -t mahasmaali/alpine:1.0.0 .'
+                       sh 'docker build -t mahasmaali/kaddem:1.0.0 .'
                    }
                }
            }
 
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker push mahasmaali/alpine:1.0.0 '
+   		    sh 'docker push mahasmaali/kaddem:1.0.0 '
    			}
    	    post {
    		always {
@@ -83,13 +88,7 @@ stage('Build docker image'){
                                             sh 'curl -X POST -H "Content-Type: application/json" -d \'{"dashboard": {...}}\' http://192.168.3.17:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?orgId=1'
                                         }
                                     }
-                                }
-
-
-
-
-
-
+                             }
     }
 
     post {
