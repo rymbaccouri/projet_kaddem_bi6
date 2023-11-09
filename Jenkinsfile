@@ -46,16 +46,21 @@ stage('Nexus Deployment') {
               }
             }
 
-stage('Deploy Docker Image') {
-      steps {
-        withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
-          sh '''
-            docker login -u baccouri -p $DOCKER_PASSWORD
-            docker push baccouri/kaddem-0.0.
-          '''
-        }
-      }
-    }
+  stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
+   			}
+   		}
+   	 stage('Push DockerHub') {
+                steps {
+   		    sh 'docker push baccouri/kaddem-0.0.1 '
+   			}
+   	    post {
+   		always {
+   			sh 'docker logout'
+   		}
+           	}
+     }
                 stage('Docker Compose') {
                       steps {
                         sh 'docker-compose up -d'
