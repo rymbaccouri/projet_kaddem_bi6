@@ -85,22 +85,26 @@ stage('Build docker image'){
                                     }
                                 }
 
-               post {
-                               success {
-                                    mail to: "maha.smaali@esprit.tn",
-                                    subject: "success",
-                                    body: "success on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL}"
-                               }
-                               failure {
-                                   mail to: "maha.smaali@esprit.tn",
-                                    subject: "Failure",
-                                    body: "Failure on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL} "
-                               }
 
-               }
 
 
 
 
     }
+
+    post {
+                                   success {
+                                        mail to: "maha.smaali@esprit.tn",
+                                        subject: "success",
+                                        body: "success on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL}"
+                                   }
+                                   failure {
+                                       mail to: "maha.smaali@esprit.tn",
+                                        subject: "Failure",
+                                        body: "Failure on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL} "
+                                   }
+
+
+                   }
+
 }
