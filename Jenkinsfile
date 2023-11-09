@@ -55,11 +55,7 @@ stage('Nexus Deployment') {
                 steps {
    		    sh 'docker push baccouri/kaddem-0.0.1 '
    			}
-   	    post {
-   		always {
-   			sh 'docker logout'
-   		}
-           	}
+   	   
      }
                 stage('Docker Compose') {
                       steps {
