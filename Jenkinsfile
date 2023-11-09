@@ -72,17 +72,17 @@ stage('Nexus Deployment') {
                      sh 'docker compose build'
                      sh 'docker compose up -d'
      	    }	}
-        stage('Grafana') {
-            steps {
-                sh 'docker run -d -p 3000:3000 grafana/grafana'
-            }
-        }
+stage('Grafana') {
+    steps {
+        sh 'docker run -d -p 4000:3000 grafana/grafana'
+    }
+}
 
-        stage('Prometheus') {
-            steps {
-                sh 'docker run -d -p 9090:9090 prom/prometheus'
-            }
-        }
+stage('Prometheus') {
+    steps {
+        sh 'docker run -d -p 9091:9090 prom/prometheus'
+    }
+}
 
     }
 }
