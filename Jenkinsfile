@@ -70,7 +70,7 @@ stage('Build docker image'){
      }
           	stage('Docker compose') {
                  steps {
-                     sh 'docker compose build'
+
                      sh 'docker compose up -d'
      	    }	}
 
@@ -84,6 +84,20 @@ stage('Build docker image'){
                                         }
                                     }
                                 }
+
+               post {
+                               success {
+                                    mail to: "maha.smaali@esprit.tn",
+                                    subject: "success",
+                                    body: "success on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL}"
+                               }
+                               failure {
+                                   mail to: "maha.smaali@esprit.tn",
+                                    subject: "Failure",
+                                    body: "Failure on job ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, Build URL: ${env.BUILD_URL} "
+                               }
+                           }
+               }
 
 
 
