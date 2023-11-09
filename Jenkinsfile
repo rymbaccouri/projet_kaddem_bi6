@@ -46,12 +46,6 @@ stage('Nexus Deployment') {
               }
             }
 
-
- stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
-   			}
-   		}
          stage("Docker Hub") {
                     steps{
                           sh "docker login -u baccouri -p dckr_pat_QU5lt1R01Hu86vNpPoYboPu-PaY"
