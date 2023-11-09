@@ -43,6 +43,13 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
+
+   stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="mahasmaali" -p="10mars2000" '
+   			}
+   		}
+
 stage('Build docker image'){
                steps{
                    script{
@@ -50,11 +57,7 @@ stage('Build docker image'){
                    }
                }
            }
-   stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="mahasmaali" -p="10mars2000" '
-   			}
-   		}
+
    	 stage('Push DockerHub') {
                 steps {
    		    sh 'docker push mahasmaali/alpine:1.0.0 '
