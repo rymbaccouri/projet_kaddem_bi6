@@ -74,13 +74,14 @@ stage('Nexus Deployment') {
      	    }	}
 stage('Grafana') {
     steps {
-        sh 'docker run -d -p 4000:3000 grafana/grafana'
+        sh 'docker run -d -p 4001:3000 grafana/grafana'
     }
 }
 
+
 stage('Prometheus') {
     steps {
-        sh 'docker run -d -p 9091:9090 prom/prometheus'
+        sh 'docker run -d -p 9092:9090 prom/prometheus'
     }
 }
 
