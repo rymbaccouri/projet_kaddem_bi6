@@ -42,7 +42,7 @@ stage('Nexus Deployment') {
 }
         stage("Docker Image"){
               steps{
-                sh "docker build -t baccouri/kaddem-0.0.1 ."
+                sh "docker build -t baccouri/alpine:1.0.0 ."
               }
             }
 
@@ -54,7 +54,7 @@ stage('Nexus Deployment') {
    		}
 stage('Push DockerHub') {
     steps {
-        sh 'docker push baccouri/kaddem-0.0.1'
+        sh 'docker push baccouri/alpine:1.0.0'
     }
     post {
         always {
