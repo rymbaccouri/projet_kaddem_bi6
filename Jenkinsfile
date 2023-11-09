@@ -47,17 +47,13 @@ stage('Nexus Deployment') {
             }
 
        stage("Docker Hub") {
-    steps {
-        script {
-            def dockerConfigDir = "/var/jenkins_home/.docker"  
+                    steps{
+                          sh "docker login -u baccouri -p dckr_pat_QU5lt1R01Hu86vNpPoYboPu-PaY"
+                          sh "docker tag kaddem-0.0.1 baccouri/kaddem-0.0.1"
+                          sh "docker push baccouri/kaddem-0.0.1"
+                    }
+            }
 
-            sh "mkdir -p $dockerConfigDir"
-            sh "echo '{\"auths\": {\"https://index.docker.io/v1/\": {\"auth\": \"${DockerHubCredentials}\"}}}' > $dockerConfigDir/config.json"
-
-            sh "docker push baccouri/kaddem-0.0.1"
-        }
-    }
-}
 
 
 
