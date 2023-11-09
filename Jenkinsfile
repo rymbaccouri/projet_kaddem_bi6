@@ -5,7 +5,7 @@ pipeline {
         stage('git') {
             steps {
                 echo 'Pulling... '
-                git branch: 'Departement',
+                git branch: 'GestionDepartement',
                 url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
             }
         }
