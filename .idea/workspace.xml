@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="06294c2b-ad63-4465-a33e-bee60b4a87ee" name="Changes" comment="Merge branch 'gestionequipe' of https://github.com/rymbaccouri/projet_kaddem_bi6 into gestionequipe">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
+=======
+    <list default="true" id="06294c2b-ad63-4465-a33e-bee60b4a87ee" name="Changes" comment="Merge branch 'gestionequipe' of https://github.com/rymbaccouri/projet_kaddem_bi6 into gestionequipe" />
+>>>>>>> df9156df6a81101639ced741fce6b60a4c3db9e2
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
