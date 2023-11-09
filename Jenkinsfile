@@ -50,7 +50,7 @@ stage('Docker Login') {
     steps {
         withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
             script {
-                sh "docker login -u baccouri -p \$DOCKER_PASSWORD"
+                sh "docker login -u baccouri -p\$DOCKER_PASSWORD"
             }
         }
     }
