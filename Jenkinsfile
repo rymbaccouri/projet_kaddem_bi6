@@ -46,16 +46,12 @@ stage('Nexus Deployment') {
               }
             }
 
-stage('Docker Login') {
-    steps {
-        withCredentials([string(credentialsId: 'mdp', variable: 'DOCKER_PASSWORD')]) {
-            script {
-                sh "docker login -u baccouri -p\$DOCKER_PASSWORD"
-            }
-        }
-    }
-}
 
+ stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
+   			}
+   		}
 stage('Push DockerHub') {
     steps {
         sh 'docker push baccouri/kaddem-0.0.1'
