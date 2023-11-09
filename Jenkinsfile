@@ -42,7 +42,7 @@ stage('Nexus Deployment') {
 }
         stage("Docker Image"){
               steps{
-                sh "docker build -t baccouri/alpine:1.0.0 ."
+                sh "docker build -t baccouri/kaddem-0.0.1."
               }
             }
 
@@ -52,16 +52,13 @@ stage('Nexus Deployment') {
    				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
    			}
    		}
-stage('Push DockerHub') {
-    steps {
-        sh 'docker push baccouri/alpine:1.0.0'
-    }
-    post {
-        always {
-            sh 'docker logout'
-        }
-    }
-}
+         stage("Docker Hub") {
+                    steps{
+                          sh "docker login -u baccouri -p dckr_pat_QU5lt1R01Hu86vNpPoYboPu-PaY"
+                          sh "docker tag kaddem-0.0.1 baccouri/kaddem-0.0.1"
+                          sh "docker push baccouri/kaddem-0.0.1"
+                    }
+            }
 
 
 
