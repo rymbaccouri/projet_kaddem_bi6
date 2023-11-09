@@ -48,7 +48,7 @@ stage('Nexus Deployment') {
 
        stage("Docker Hub") {
                     steps{
-                          sh "docker login -u baccouri -p dckr_pat_QU5lt1R01Hu86vNpPoYboPu-PaY"
+                          sh "docker login -u baccouri -p dckr_pat_wtGaX8RkIjOrVPPOC0NXn3k1DLo"
                           sh "docker tag kaddem-0.0.1 baccouri/kaddem-0.0.1"
                           sh "docker push baccouri/kaddem-0.0.1"
                     }
