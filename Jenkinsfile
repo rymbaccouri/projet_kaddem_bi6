@@ -48,7 +48,7 @@ stage('Nexus Deployment') {
  	stage('Build docker image'){
                steps{
                    script{
-                       sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="ousse" -p="dockerhub" '
+                       sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="ousse" -p="dckr_pat_TqG5C38y8Z3pCQ6la-ctfuWyea8" '
                        sh 'docker build -t ousse/back:1.0.0 .'
                    }
                }
