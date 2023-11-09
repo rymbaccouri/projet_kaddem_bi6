@@ -40,20 +40,20 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-        stage("Docker Image"){
+             stage("Docker Image"){
               steps{
                 sh "docker build -t baccouri/kaddem-0.0.1 ."
               }
             }
 
-       stage('Docker Login') {
+  stage('Docker Login') {
                steps {
    				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
    			}
    		}
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker push kaddem-0.0.1  '
+   		    sh 'docker push baccouri/kaddem-0.0.1 '
    			}
    	    post {
    		always {
@@ -61,6 +61,7 @@ stage('Nexus Deployment') {
    		}
            	}
      }
+
 
 
 
