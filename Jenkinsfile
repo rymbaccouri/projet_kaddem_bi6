@@ -46,20 +46,21 @@ stage('Nexus Deployment') {
               }
             }
 
- stage('Deploy Docker Image') {
-    steps {
-        withCredentials([string(credentialsId: 'mdp')]) {
-            script {
-                def dockerAuth = docker.createCredentialsDomain('docker', [
-                    [credentialsId: 'mdp', registry: '', usernameVariable: 'baccouri', passwordVariable: 'docker123']
-                ])
-                docker.withRegistry('', dockerAuth) {
-                    sh 'docker push baccouri/kaddem-0.0.1'
-                }
-            }
-        }
-    }
-}
+  stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
+   			}
+   		}
+   	 stage('Push DockerHub') {
+                steps {
+   		    sh 'docker push baccouri/kaddem:1.0.0 '
+   			}
+   	    post {
+   		always {
+   			sh 'docker logout'
+   		}
+           	}
+     }
 
                 stage('Docker Compose') {
                       steps {
