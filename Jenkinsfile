@@ -43,6 +43,33 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
+stage('Build docker image'){
+               steps{
+                   script{
+                       sh 'docker build -t mahasmaali/alpine:1.0.0 .'
+                   }
+               }
+           }
+   stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="mahasmaali" -p="10mars2000" '
+   			}
+   		}
+   	 stage('Push DockerHub') {
+                steps {
+   		    sh 'docker push mahasmaali/alpine:1.0.0 '
+   			}
+   	    post {
+   		always {
+   			sh 'docker logout'
+   		}
+           	}
+     }
+          	stage('Docker compose') {
+                 steps {
+                     sh 'docker compose build'
+                     sh 'docker compose up -d'
+     	    }	}
 
 
 
