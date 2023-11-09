@@ -48,15 +48,13 @@ stage('Nexus Deployment') {
  	stage('Build docker image'){
                steps{
                    script{
-                       sh 'docker build -t ousse/alpine:1.0.0 .'
+                       sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="ousse" -p="dockerhub" '
+                       sh 'docker build -t ousse/back:1.0.0 .'
                    }
                }
            }
-   stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="ousse" -p="dockerhub" '
-   			}
-   		}
+
+
    	 stage('Push DockerHub') {
                 steps {
    		    sh 'docker push ousse/alpine:1.0.0 '
