@@ -10,13 +10,21 @@
     </parent>
     <groupId>tn.esprit.spring</groupId>
     <artifactId>kaddem</artifactId>
+<<<<<<< HEAD
     <version>0.0.1-SNAPSHOT</version>
+=======
+    <version>1.0.0</version>
+>>>>>>> origin/Departement
     <name>kaddem</name>
     <description>kaddem</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Departement
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -47,8 +55,21 @@
             <version>1.6.9</version>
         </dependency>
 
+<<<<<<< HEAD
     </dependencies>
 
+=======
+
+
+    </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>deploymentRepo</id>
+            <name>Nexus Repository</name>
+            <url>http://192.168.33.10:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+>>>>>>> origin/Departement
     <build>
         <plugins>
             <plugin>
@@ -66,4 +87,10 @@
         </plugins>
     </build>
 
+<<<<<<< HEAD
 </project>
+=======
+
+</project>
+
+>>>>>>> origin/Departement
