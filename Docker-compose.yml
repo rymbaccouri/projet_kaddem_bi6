@@ -1,26 +1,25 @@
-version: "3.8"
+version: "3"
+
 services:
   mysqldb:
-    image: mysql:5.7
+    container_name: mysqldb
+    image: mysql/mysql-server:8.0
     restart: unless-stopped
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3307:3306"
-    volumes:
-      - db:/var/lib/mysql
+      - 3307:3307
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+      - MYSQL_DATABASE=sqldb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=0000
 
-  gestion-station-ski:
-    build: .
-    depends_on:
-      - mysqldb
+  spring_app:
+    image: mahasmaali/alpine
+    container_name: alpine
     restart: on-failure
     environment:
-      MYSQL_ROOT_PASSWORD: ""
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/kaddem\db?&createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     ports:
-      - "8089:8089"
-    stdin_open: true
-    tty: true
-
-volumes:
-  db:
+      - 8089:8089
+    depends_on:
+      - mysqldb

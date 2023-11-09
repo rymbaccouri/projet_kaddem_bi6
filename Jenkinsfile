@@ -75,6 +75,17 @@ stage('Build docker image'){
      	    }	}
 
 
+     	     stage('Configure Grafana') {
+                                    steps {
+                                        script {
+                                            // Exécutez les commandes pour configurer Grafana, par exemple, via l'API REST de Grafana
+                                            // Exemple: Créez un tableau de bord via l'API Grafana
+                                            sh 'curl -X POST -H "Content-Type: application/json" -d \'{"dashboard": {...}}\' http://192.168.3.17:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?orgId=1'
+                                        }
+                                    }
+                                }
+
+
 
 
     }
