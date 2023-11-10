@@ -40,5 +40,6 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-   
+
+        
 }
