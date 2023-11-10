@@ -61,13 +61,21 @@ stage('Nexus Deployment') {
             }
         }
 
-       stage("Docker Hub") {
-                    steps{
-                    
-                          sh 'docker push baccouri/kaddem-0.0.1:latest'
-
-                    }
-            }
+    stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
+   			}
+   		}
+   	 stage('Push DockerHub') {
+                steps {
+   		    sh 'docker push baccouri/kaddem-0.0.1:latest '
+   			}
+   	    post {
+   		always {
+   			sh 'docker logout'
+   		}
+           	}
+     }
 
 
 
