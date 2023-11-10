@@ -64,7 +64,8 @@ stage('Nexus Deployment') {
        stage("Docker Hub") {
                     steps{
                     
-                          sh "docker push rymbaccouri/kaddem-0.0.1"
+                          sh 'docker push baccouri/kaddem-0.0.1:latest'
+
                     }
             }
 
