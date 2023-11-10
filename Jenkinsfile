@@ -40,11 +40,26 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-        stage("Docker Image"){
-              steps{
-                sh "docker build -t baccouri/kaddem-0.0.1 ."
-              }
+            stage("Docker Build") {
+            steps {
+                script {
+                    // Debug : Vérifiez les autorisations Docker
+                    sh 'docker info'
+
+                    // Debug : Affichez les fichiers dans le répertoire de construction
+                    sh 'ls -la'
+
+                    // Debug : Affichez le contenu du Dockerfile
+                    sh 'cat Dockerfile'
+
+                    // Debug : Essayez de construire l'image sans Jenkins pour voir si le problème persiste
+                    sh 'docker build -t test-image .'
+
+                    // Construisez votre image Docker
+                    sh 'docker build -t baccouri/kaddem-0.0.1 .'
+                }
             }
+        }
 
        stage("Docker Hub") {
                     steps{
