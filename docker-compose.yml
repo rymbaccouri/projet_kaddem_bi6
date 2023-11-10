@@ -10,7 +10,7 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  gestion-station-ski:
+  gestion_etudiant:
     depends_on:
       - mysqldb
     image: baccouri/kaddem-0.0.1.jar
