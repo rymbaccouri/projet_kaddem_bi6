@@ -48,7 +48,7 @@ stage('Nexus Deployment') {
  	stage('Build docker image'){
                steps{
                    script{
-                       sh 'docker build -t elemejri/alpine:1.0.0 .'
+                       sh 'docker build -t elemejri/kaddem-0.0.1 .'
                    }
                }
            }
@@ -59,7 +59,7 @@ stage('Nexus Deployment') {
    		}
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker push elemejri/alpine:1.0.0 '
+   		    sh 'docker push elemejri/kaddem-0.0.1 '
    			}
    	    post {
    		always {
@@ -74,14 +74,14 @@ stage('Nexus Deployment') {
      	    }	}
 stage('Grafana') {
     steps {
-        sh 'docker run -d -p 4002:3000 grafana/grafana'
+        sh 'docker run -d -p 4003:3000 grafana/grafana'
     }
 }
 
 
 stage('Prometheus') {
     steps {
-        sh 'docker run -d -p 9093:9090 prom/prometheus'
+        sh 'docker run -d -p 9094:9090 prom/prometheus'
     }
 }
 
