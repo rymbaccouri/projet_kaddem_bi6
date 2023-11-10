@@ -40,28 +40,5 @@ stage('Nexus Deployment') {
         sh 'mvn deploy'
     }
 }
-        stage("Docker Image"){
-              steps{
-                sh "docker build -t baccouri/projet_kaddem_bi6-1.0 ."
-              }
-            }
-
-       stage("Docker Hub") {
-                    steps{
-                          sh "docker login -u baccouri -p dckr_pat_zA2hrtq24-iL4ay0jNICUiOblbA"
-                          sh "docker tag kaddem-0.0.1 rymbaccouri/kaddem-0.0.1"
-                          sh "docker push rymbaccouri/kaddem-0.0.1"
-                    }
-            }
-
-
-
-
-
-                stage('Docker Compose') {
-                      steps {
-                        sh 'docker-compose up -d'
-                      }
-                    }
-    }
+   
 }
