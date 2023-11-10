@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('git') {
+        stage('Git : Source Code Checkout') {
             steps {
                 echo 'Pulling... '
                 git branch: 'gestionContrat',
@@ -10,20 +10,20 @@ pipeline {
             }
         }
 
-        stage('Maven Clean') {
+        stage('Clean Project with Maven') {
             steps {
-                // Étape pour nettoyer le projet avec Maven
+
                 sh 'mvn clean'
             }
         }
 
-        stage('Maven Compile') {
+        stage('Compile Project with Maven') {
             steps {
-                // Étape pour compiler le projet avec Maven
+
                 sh 'mvn compile'
             }
         }
-        stage('MVN SONARQUBE') {
+        stage('MVN SONARQUBE Analysis') {
     steps {
         // Étape pour compiler le projet avec Maven
         script {
@@ -32,13 +32,18 @@ pipeline {
         }
     }
 }
-        stage('JUNIT-MOCKITO'){
+        stage('JUNIT-MOCKITO Tests'){
             steps{
                 echo'laching units test ...'
                 sh 'mvn test'
             }
+            post {
+                always {
+                    junit "**/target/surefire-reports/*.xml"
+                }
+            }
         }
-stage('Nexus Deployment') {
+stage('Nexus Repository Deployment') {
     steps {
         sh 'mvn deploy'
     }
@@ -57,7 +62,7 @@ stage('Nexus Deployment') {
    				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
    			}
    		}
-   	 stage('Push DockerHub') {
+   	 stage('Push Docker Image to DockerHub') {
                 steps {
    		    sh 'docker push elemejri/kaddem-0.0.1 '
    			}
@@ -67,23 +72,30 @@ stage('Nexus Deployment') {
    		}
            	}
      }
-          	stage('Docker compose') {
+          	stage('Build and Start Docker Compose') {
                  steps {
                      sh 'docker compose build'
                      sh 'docker compose up -d'
      	    }	}
-stage('Grafana') {
+stage('Start Grafana') {
     steps {
         sh 'docker run -d -p 4003:3000 grafana/grafana'
     }
 }
 
 
-stage('Prometheus') {
+stage('Start Prometheus') {
     steps {
         sh 'docker run -d -p 9094:9090 prom/prometheus'
     }
 }
-
+        stage('Email Notification') {
+            steps {
+                script {
+                    mail bcc: '', body: '''Welcome to jenkins email alerts.
+Thanks,''', cc: '', from: '', replyTo: '', subject: 'Email Notification', to: 'mejri.ele@esprit.tn'
+                }
+            }
+        }
     }
 }
