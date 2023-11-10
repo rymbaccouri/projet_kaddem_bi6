@@ -10,15 +10,15 @@ services:
     volumes:
       - db:/var/lib/mysql
 
-  gestion_etudiant:
+  gestion-etudiant:
+    build: .
     depends_on:
       - mysqldb
-    image: baccouri/kaddem-0.0.1.jar
     restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: ""
     ports:
-      - "8089:8089"
+      - "8090:8090"
     stdin_open: true
     tty: true
 
