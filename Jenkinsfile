@@ -64,7 +64,7 @@ stage('Nexus Deployment') {
 
    	 stage('Push DockerHub') {
                 steps {
-   		    sh 'docker push ousse/alpine:1.0.0 '
+   		    sh 'docker push ousse/back:1.0 '
    			}
    	    post {
    		always {
