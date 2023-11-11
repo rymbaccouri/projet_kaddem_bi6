@@ -28,6 +28,7 @@ pipeline {
         // Étape pour compiler le projet avec Maven
         script {
 
+
             sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
         }
     }
@@ -68,6 +69,7 @@ stage('Nexus Repository Deployment') {
    			}
    	    post {
    		always {
+
    			sh 'docker logout'
    		}
            	}
@@ -79,14 +81,14 @@ stage('Nexus Repository Deployment') {
      	    }	}
 stage('Start Grafana') {
     steps {
-        sh 'docker run -d -p 4004:3000 grafana/grafana'
+        sh 'docker run -d -p 4005:3000 grafana/grafana'
     }
 }
 
 
 stage('Start Prometheus') {
     steps {
-        sh 'docker run -d -p 9095:9090 prom/prometheus'
+        sh 'docker run -d -p 9096:9090 prom/prometheus'
     }
 }
         stage('Email Notification') {
