@@ -91,10 +91,13 @@ stage('Nexus Deployment') {
                 }
             }
 
-              stage('E-mail') {
+              stage('Email') {
+               steps {
                            mail bcc: '', body: ''' Successful Completion of Kaddem
                            ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Reponse', to: 'abedelwahed.oussema@esprit.tn'
                         }
+                         }
+
 
 
     }
