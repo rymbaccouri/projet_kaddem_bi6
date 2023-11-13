@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Git : Source Code Checkout') {
             steps {
                 echo 'Pulling... '
@@ -13,9 +14,11 @@ pipeline {
         stage('Clean Project with Maven') {
             steps {
 
+
                 sh 'mvn clean'
             }
         }
+
 
         stage('Compile Project with Maven') {
             steps {
@@ -25,7 +28,7 @@ pipeline {
         }
         stage('MVN SONARQUBE Analysis') {
     steps {
-        // Étape pour compiler le projet avec Maven
+  
         script {
 
             sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
@@ -43,7 +46,29 @@ pipeline {
                 }
             }
         }
-stage('Nexus Repository Deployment') {
+
+        stage('Maven Compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        
+        stage('MVN SONARQUBE') {
+            steps {
+                script {
+                    sh "mvn sonar:sonar -Dsonar.login=squ_2bf48e91e6296c2a681ecb743886ae70229627a5"
+                }
+            }
+        }
+
+stage('Junit / Mockito') {
+    steps {
+        sh 'mvn test'
+    }
+}
+
+stage('Nexus Deployment') {
+
     steps {
         sh 'mvn deploy'
     }
@@ -65,13 +90,7 @@ stage('Nexus Repository Deployment') {
    	 stage('Push Docker Image to DockerHub') {
                 steps {
    		    sh 'docker push elemejri/kaddem-0.0.1 '
-   			}
-   	    post {
-   		always {
-   			sh 'docker logout'
-   		}
-           	}
-     }
+
           	stage('Build and Start Docker Compose') {
                  steps {
                      sh 'docker compose build'
@@ -99,3 +118,14 @@ Thanks,''', cc: '', from: '', replyTo: '', subject: 'Email Notification', to: 'm
         }
     }
 }
+
+
+
+
+
+
+        
+
+    }
+}
+

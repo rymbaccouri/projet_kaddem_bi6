@@ -11,6 +11,7 @@ services:
       - db:/var/lib/mysql
 
   gestion-contrat:
+
     build: .
     depends_on:
       - mysqldb
