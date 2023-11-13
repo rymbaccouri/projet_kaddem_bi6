@@ -2,103 +2,100 @@ pipeline {
     agent any
 
     stages {
-        stage("Git") {
+
+        stage('git') {
             steps {
-                sh 'git checkout gestion_etudiant '
-                sh 'git pull origin gestion_etudiant'
-            }
-        }
+                echo 'Pulling... '
+                git branch: 'GestionDepartement',
+                url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
+            }}
 
         stage('Maven Clean') {
             steps {
+
                 sh 'mvn clean'
             }
         }
 
         stage('Maven Compile') {
             steps {
+
+                // Étape pour compiler le projet avec Maven
                 sh 'mvn compile'
             }
         }
-        
         stage('MVN SONARQUBE') {
-            steps {
-                script {
-                    sh "mvn sonar:sonar -Dsonar.login=squ_2bf48e91e6296c2a681ecb743886ae70229627a5"
-                }
+    steps {
+        // Étape pour compiler le projet avec Maven
+        script {
+
+            sh "mvn sonar:sonar -Dsonar.login=squ_e8b74f688ee370d72fba5d8e40af97f5e96d7664"
+        }
+    }
+}
+        stage('JUNIT-MOCKITO'){
+            steps{
+                echo'laching units test ...'
+                sh 'mvn test'
             }
         }
 
-stage('Junit / Mockito') {
-    steps {
-        sh 'mvn test'
-    }
-}
+
 
 stage('Nexus Deployment') {
     steps {
         sh 'mvn deploy'
     }
 }
-            stage("Docker Build") {
-            steps {
-                script {
-                    // Debug : Vérifiez les autorisations Docker
-                    sh 'docker info'
 
-                    // Debug : Affichez les fichiers dans le répertoire de construction
-                    sh 'ls -la'
 
-                    // Debug : Affichez le contenu du Dockerfile
-                    sh 'cat Dockerfile'
 
-                    // Debug : Essayez de construire l'image sans Jenkins pour voir si le problème persiste
-                    sh 'docker build -t test-image .'
+ 	stage('Build docker image'){
+               steps{
+                   script{
 
-                    // Construisez votre image Docker
-                    sh 'docker build -t baccouri/kaddem-0.0.1 .'
+                       sh 'docker build -t back:1.0 .'
+                   }
+               }
+           }
+            stage("Docker Hub") {
+                               steps{
+                                     sh "docker login -u ousse -p 211JMT1384o"
+                                     sh "docker tag back:1.0 ousse/back:1.0"
+                                     sh "docker push ousse/back:1.0"
+                               }
+                       }
+
+
+
+          	stage('Docker compose') {
+                 steps {
+                     sh 'docker compose build'
+                     sh 'docker compose up -d'
+     	    }	}
+
+     	       stage('Grafana') {
+                steps {
+                    sh 'docker run -d -p 4004:3000 grafana/grafana'
                 }
             }
-        }
 
-    stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
-   			}
-   		}
-   	 stage('Push DockerHub') {
+
+            stage('Prometheus') {
                 steps {
-   		    sh 'docker push baccouri/kaddem-0.0.1:latest '
-   			}
-   	    post {
-   		always {
-   			sh 'docker logout'
-   		}
-           	}
-     }
+                    sh 'docker run -d -p 9095:9090 prom/prometheus'
+                }
+            }
+
+              stage('Email') {
+               steps {
+                           mail bcc: '', body: ''' Successful Completion of Kaddem
+                           ''', cc: '', from: '', replyTo: '', subject: 'Jenkins Reponse', to: 'abedelwahed.oussema@esprit.tn'
+                        }
+                         }
+
+
+    }}
 
 
 
-
-
-                stage('Docker Compose') {
-                      steps {
-                        sh 'docker-compose up -d'
-                      }
-                    }
-        stage('Grafana') {
-    steps {
-        sh 'docker run -d -p 4003:3000 grafana/grafana'
-    }
-}
-
-
-stage('Prometheus') {
-    steps {
-        sh 'docker run -d -p 9094:9090 prom/prometheus'
-    }
-}
-        
-
-    }
-}
