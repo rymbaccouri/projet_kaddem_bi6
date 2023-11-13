@@ -121,6 +121,14 @@ stage('Nexus Deployment') {
                 }
             }
         }
+        stage('Email Notification') {
+    steps {
+        emailext body: 'Welcome to Jenkins email alerts.\nThanks,',
+                 subject: 'Email Notification',
+                 to: 'rym.baccouri@esprit.tn'
+    }
+}
+
                 
 
     }
