@@ -86,8 +86,6 @@ stage('Nexus Deployment') {
                         sh 'docker-compose up -d'
                       }
                     }
-pipeline {
-    agent any
 
 
         stage('Grafana') {
