@@ -86,19 +86,35 @@ stage('Nexus Deployment') {
                         sh 'docker-compose up -d'
                       }
                     }
+pipeline {
+    agent any
+
+    stages {
         stage('Grafana') {
-    steps {
-        sh 'docker run -d -p 4003:3000 grafana/grafana'
+            steps {
+                script {
+                   
+                    sh 'docker stop grafana-container || true'
+                    sh 'docker rm grafana-container || true'
+                    sh 'docker run -d -p 4003:3000 --name grafana-container grafana/grafana'
+                }
+            }
+        }
+
+        stage('Prometheus') {
+            steps {
+                script {
+                
+                    sh 'docker stop prometheus-container || true'
+                    sh 'docker rm prometheus-container || true'
+
+                    sh 'docker run -d -p 9094:9090 --name prometheus-container prom/prometheus'
+                }
+            }
+        }
     }
 }
-
-
-stage('Prometheus') {
-    steps {
-        sh 'docker run -d -p 9094:9090 prom/prometheus'
-    }
-}
-        
+     
 
     }
 }
