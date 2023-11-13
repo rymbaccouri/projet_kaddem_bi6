@@ -85,7 +85,6 @@ stage('Start Grafana') {
     }
 }
 
-
 stage('Start Prometheus') {
     steps {
         sh 'docker run -d -p 9096:9090 prom/prometheus'
