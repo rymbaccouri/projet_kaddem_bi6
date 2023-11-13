@@ -6,26 +6,22 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-
-      - "3308:3306"
+      - "3307:3306"
     volumes:
       - db:/var/lib/mysql
 
+  gestion-departement:
 
     build: .
     depends_on:
       - mysqldb
-    
+    restart: on-failure
+    environment:
       MYSQL_ROOT_PASSWORD: ""
     ports:
-
-      - "8089:8089"
-
+      - "8090:8090"
     stdin_open: true
     tty: true
 
 volumes:
-
   db:
-
-
