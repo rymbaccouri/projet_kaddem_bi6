@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Git : Source Code Checkout') {
+        /*stage('Git : Source Code Checkout') {
             steps {
                 echo 'Pulling... '
                 git branch: 'gestionContracts',
                 url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
             }
-        }
+        }*/
 
         stage('Clean Project with Maven') {
             steps {
