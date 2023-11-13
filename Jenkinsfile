@@ -98,6 +98,7 @@ stage('Prometheus') {
         sh 'docker run -d -p 9094:9090 prom/prometheus'
     }
 }
+        
 
     }
 }
