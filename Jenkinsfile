@@ -100,7 +100,8 @@ stage('Nexus Deployment') {
                     }
 
                    
-                    sh 'docker run -d -p 4003:3000 --name grafana-container grafana/grafana'
+                    sh 'docker run -d -p 4004:3000 --name grafana-container-new grafana/grafana
+'
                 }
             }}
       stage('Prometheus') {
@@ -117,7 +118,7 @@ stage('Nexus Deployment') {
                         sh "docker rm ${prometheusContainerName}"
                     }
 
-                    sh 'docker run -d -p 9094:9090 --name ${prometheusContainerName} prom/prometheus'
+                    sh 'docker run -d -p 9095:9090 --name ${prometheusContainerName} prom/prometheus'
                 }
             }
         }
