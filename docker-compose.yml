@@ -15,7 +15,6 @@ services:
     build: .
     depends_on:
       - mysqldb
-    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: ""
     ports:
