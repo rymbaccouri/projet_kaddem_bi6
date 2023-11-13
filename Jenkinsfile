@@ -117,7 +117,7 @@ stage('Nexus Deployment') {
                         sh "docker rm ${prometheusContainerName}"
                     }
 
-                    sh 'docker run -d -p 9095:9090 --name ${prometheusContainerName} prom/prometheus'
+                    sh 'docker run -d -p 9095:9090 --name prometheus-container prom/prometheus'
                 }
             }
         }
