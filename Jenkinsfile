@@ -88,28 +88,42 @@ stage('Nexus Deployment') {
                     }
 
 
-        stage('Grafana') {
+       stage('Grafana') {
             steps {
                 script {
+                    def grafanaContainerName = 'grafana-container'
+                    
                    
-                    sh 'docker stop grafana-container || true'
-                    sh 'docker rm grafana-container || true'
-                    sh 'docker run -d -p 4003:3000 --name grafana-container grafana/grafana'
-                }
-            }
-        }
+                    def existingContainerId = sh(script: "docker ps -q -f name=${grafanaContainerName}", returnStdout: true).trim()
 
-        stage('Prometheus') {
+                    
+                    if (existingContainerId) {
+                        sh "docker stop ${grafanaContainerName}"
+                        sh "docker rm ${grafanaContainerName}"
+                    }
+
+                   
+                    sh 'docker run -d -p 4003:3000 --name ${grafanaContainerName} grafana/grafana'
+                }
+      stage('Prometheus') {
             steps {
                 script {
-                
-                    sh 'docker stop prometheus-container || true'
-                    sh 'docker rm prometheus-container || true'
+                    def prometheusContainerName = 'prometheus-container'
+                    
+                  
+                    def existingContainerId = sh(script: "docker ps -q -f name=${prometheusContainerName}", returnStdout: true).trim()
 
-                    sh 'docker run -d -p 9094:9090 --name prometheus-container prom/prometheus'
+                    
+                    if (existingContainerId) {
+                        sh "docker stop ${prometheusContainerName}"
+                        sh "docker rm ${prometheusContainerName}"
+                    }
+
+                    sh 'docker run -d -p 9094:9090 --name ${prometheusContainerName} prom/prometheus'
                 }
             }
         }
+
     }
 }
      
