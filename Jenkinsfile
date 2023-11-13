@@ -2,16 +2,48 @@ pipeline {
     agent any
 
     stages {
-        stage("Git") {
+
+        stage('Git : Source Code Checkout') {
             steps {
-                sh 'git checkout gestion_etudiant '
-                sh 'git pull origin gestion_etudiant'
+                echo 'Pulling... '
+                git branch: 'gestionContrat',
+                url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
             }
         }
 
-        stage('Maven Clean') {
+        stage('Clean Project with Maven') {
             steps {
+
+
                 sh 'mvn clean'
+            }
+        }
+
+
+        stage('Compile Project with Maven') {
+            steps {
+
+                sh 'mvn compile'
+            }
+        }
+        stage('MVN SONARQUBE Analysis') {
+    steps {
+  
+        script {
+
+            sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
+        }
+    }
+}
+        stage('JUNIT-MOCKITO Tests'){
+            steps{
+                echo'laching units test ...'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit "**/target/surefire-reports/*.xml"
+                }
             }
         }
 
@@ -36,69 +68,64 @@ stage('Junit / Mockito') {
 }
 
 stage('Nexus Deployment') {
+
     steps {
         sh 'mvn deploy'
     }
 }
-            stage("Docker Build") {
+
+
+ 	stage('Build docker image'){
+               steps{
+                   script{
+                       sh 'docker build -t elemejri/kaddem-0.0.1 .'
+                   }
+               }
+           }
+   stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
+   			}
+   		}
+   	 stage('Push Docker Image to DockerHub') {
+                steps {
+   		    sh 'docker push elemejri/kaddem-0.0.1 '
+
+          	stage('Build and Start Docker Compose') {
+                 steps {
+                     sh 'docker compose build'
+                     sh 'docker compose up -d'
+     	    }	}
+stage('Start Grafana') {
+    steps {
+        sh 'docker run -d -p 4004:3000 grafana/grafana'
+    }
+}
+
+
+stage('Start Prometheus') {
+    steps {
+        sh 'docker run -d -p 9095:9090 prom/prometheus'
+    }
+}
+        stage('Email Notification') {
             steps {
                 script {
-                    // Debug : Vérifiez les autorisations Docker
-                    sh 'docker info'
-
-                    // Debug : Affichez les fichiers dans le répertoire de construction
-                    sh 'ls -la'
-
-                    // Debug : Affichez le contenu du Dockerfile
-                    sh 'cat Dockerfile'
-
-                    // Debug : Essayez de construire l'image sans Jenkins pour voir si le problème persiste
-                    sh 'docker build -t test-image .'
-
-                    // Construisez votre image Docker
-                    sh 'docker build -t baccouri/kaddem-0.0.1 .'
+                    mail bcc: '', body: '''Welcome to jenkins email alerts.
+Thanks,''', cc: '', from: '', replyTo: '', subject: 'Email Notification', to: 'mejri.ele@esprit.tn'
                 }
             }
         }
-
-    stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="baccouri" -p="docker123" '
-   			}
-   		}
-   	 stage('Push DockerHub') {
-                steps {
-   		    sh 'docker push baccouri/kaddem-0.0.1:latest '
-   			}
-   	    post {
-   		always {
-   			sh 'docker logout'
-   		}
-           	}
-     }
-
-
-
-
-
-                stage('Docker Compose') {
-                      steps {
-                        sh 'docker-compose up -d'
-                      }
-                    }
-        stage('Grafana') {
-    steps {
-        sh 'docker run -d -p 4003:3000 grafana/grafana'
     }
 }
 
 
-stage('Prometheus') {
-    steps {
-        sh 'docker run -d -p 9094:9090 prom/prometheus'
-    }
-}
+
+
+
+
         
 
     }
 }
+
