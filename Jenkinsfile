@@ -89,7 +89,7 @@ stage('Nexus Deployment') {
 pipeline {
     agent any
 
-    stages {
+
         stage('Grafana') {
             steps {
                 script {
