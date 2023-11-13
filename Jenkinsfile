@@ -100,7 +100,7 @@ stage('Nexus Deployment') {
                     }
 
                    
-                    sh 'docker run -d -p 4003:3000 --name ${grafanaContainerName} grafana/grafana'
+                    sh 'docker run -d -p 4003:3000 --name grafana-container grafana/grafana'
                 }
             }}
       stage('Prometheus') {
