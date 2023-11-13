@@ -2,23 +2,24 @@ pipeline {
     agent any
 
     stages {
+
         stage('git') {
             steps {
                 echo 'Pulling... '
                 git branch: 'GestionDepartement',
                 url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
-            }
-        }
+            }}
 
         stage('Maven Clean') {
             steps {
-                // Étape pour nettoyer le projet avec Maven
+
                 sh 'mvn clean'
             }
         }
 
         stage('Maven Compile') {
             steps {
+
                 // Étape pour compiler le projet avec Maven
                 sh 'mvn compile'
             }
@@ -38,11 +39,15 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
+
+
 stage('Nexus Deployment') {
     steps {
         sh 'mvn deploy'
     }
 }
+
 
 
  	stage('Build docker image'){
@@ -62,16 +67,7 @@ stage('Nexus Deployment') {
                        }
 
 
-   	 stage('Push DockerHub') {
-                steps {
-   		    sh 'docker push ousse/back:1.0 '
-   			}
-   	    post {
-   		always {
-   			sh 'docker logout'
-   		}
-           	}
-     }
+
           	stage('Docker compose') {
                  steps {
                      sh 'docker compose build'
@@ -99,6 +95,7 @@ stage('Nexus Deployment') {
                          }
 
 
+    }}
 
-    }
-}
+
+

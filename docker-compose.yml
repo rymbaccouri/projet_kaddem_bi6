@@ -6,11 +6,12 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
+
       - "3308:3306"
     volumes:
       - db:/var/lib/mysql
 
-  gestion-station-ski:
+
     build: .
     depends_on:
       - mysqldb
@@ -18,9 +19,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ""
     ports:
+
       - "8089:8089"
+
     stdin_open: true
     tty: true
 
 volumes:
+
   db:
+
+
