@@ -74,18 +74,42 @@ stage('Nexus Deployment') {
                      sh 'docker compose up -d'
      	    }	}
 
-     	       stage('Grafana') {
-                steps {
-                    sh 'docker run -d -p 4004:3000 grafana/grafana'
+     	   stage('Grafana') {
+            steps {
+                script {
+                    def grafanaContainerName = 'grafana-container'
+                    
+                   
+                    def existingContainerId = sh(script: "docker ps -q -f name=${grafanaContainerName}", returnStdout: true).trim()
+
+                    
+                    if (existingContainerId) {
+                        sh "docker stop ${grafanaContainerName}"
+                        sh "docker rm ${grafanaContainerName}"
+                    }
+
+                   
+                    sh 'docker run -d -p 4004:3000 --name grafana-container-new grafana/grafana'
+                }
+            }}
+      stage('Prometheus') {
+            steps {
+                script {
+                    def prometheusContainerName = 'prometheus-container'
+                    
+                  
+                    def existingContainerId = sh(script: "docker ps -q -f name=${prometheusContainerName}", returnStdout: true).trim()
+
+                    
+                    if (existingContainerId) {
+                        sh "docker stop ${prometheusContainerName}"
+                        sh "docker rm ${prometheusContainerName}"
+                    }
+
+                    sh 'docker run -d -p 9095:9090 --name prometheus-container prom/prometheus'
                 }
             }
-
-
-            stage('Prometheus') {
-                steps {
-                    sh 'docker run -d -p 9095:9090 prom/prometheus'
-                }
-            }
+        }
 
               stage('Email') {
                steps {
