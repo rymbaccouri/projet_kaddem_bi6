@@ -74,42 +74,16 @@ stage('Nexus Deployment') {
                      sh 'docker compose up -d'
      	    }	}
 
-     	   stage('Grafana') {
-            steps {
-                script {
-                    def grafanaContainerName = 'grafana-container'
-                    
-                   
-                    def existingContainerId = sh(script: "docker ps -q -f name=${grafanaContainerName}", returnStdout: true).trim()
-
-                    
-                    if (existingContainerId) {
-                        sh "docker stop ${grafanaContainerName}"
-                        sh "docker rm ${grafanaContainerName}"
-                    }
-
-                   
-                    sh 'docker run -d -p 4004:3000 --name grafana-container-new grafana/grafana'
-                }
-            }}
-      stage('Prometheus') {
-            steps {
-                script {
-                    def prometheusContainerName = 'prometheus-container'
-                    
-                  
-                    def existingContainerId = sh(script: "docker ps -q -f name=${prometheusContainerName}", returnStdout: true).trim()
-
-                    
-                    if (existingContainerId) {
-                        sh "docker stop ${prometheusContainerName}"
-                        sh "docker rm ${prometheusContainerName}"
-                    }
-
-                    sh 'docker run -d -p 9095:9090 --name prometheus-container prom/prometheus'
-                }
-            }
-        }
+        
+     stage('Configure Grafana') {
+                                    steps {
+                                        script {
+                                            // Exécutez les commandes pour configurer Grafana, par exemple, via l'API REST de Grafana
+                                            // Exemple: Créez un tableau de bord via l'API Grafana
+                                            sh 'curl -X POST -H "Content-Type: application/json" -d \'{"dashboard": {...}}\' http://192.168.3.17:3000/d/haryan-jenkins/jenkins3a-performance-and-health-overview?orgId=1'
+                                        }
+                                    }
+                             }
 
               stage('Email') {
                steps {
