@@ -1,48 +1,4 @@
-package tn.esprit.spring.kaddem.contrat;
-/*package tn.esprit.spring.kaddem.contrat;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import tn.esprit.spring.kaddem.entities.Contrat;
-import tn.esprit.spring.kaddem.entities.Specialite;
-import tn.esprit.spring.kaddem.repositories.ContratRepository;
-import tn.esprit.spring.kaddem.services.ContratServiceImpl;
-
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-@ExtendWith(MockitoExtension.class)
-public class ContratServiceTest {
-
-    @InjectMocks
-    private ContratServiceImpl contratService;
-
-    @Mock
-    private ContratRepository contratRepository;
-
-    @Test
-    public void testAddContrat() {
-        // Création d'un objet Contrat de test
-        Contrat contrat = new Contrat(new Date(2023, 10, 1), new Date(2023, 10, 31), Specialite.IA, false, 5000);
-
-        when(contratRepository.save(contrat)).thenReturn(contrat);
-
-        Contrat result = contratService.addContrat(contrat);
-
-        // Vérification que la méthode save a été appelée une fois avec le contrat en argument
-        verify(contratRepository).save(contrat);
-
-        // Vérification du résultat
-        assertEquals(contrat, result);
-    }
-}*/
-/*_____________________________________________________________________________*/
+package ContratServiceTest.java;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

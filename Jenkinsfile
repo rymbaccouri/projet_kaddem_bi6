@@ -1,0 +1,121 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Git : Source Code Checkout') {
+            steps {
+                echo 'Pulling... '
+                git branch: 'Project',
+                url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
+            }
+        }
+
+        stage('Clean Project with Maven') {
+            steps {
+                sh 'mvn clean'
+            }
+        }
+
+
+        stage('Compile Project with Maven') {
+            steps {
+
+                sh 'mvn compile'
+            }
+        }
+        stage('MVN SONARQUBE Analysis') {
+    steps {
+
+        script {
+
+            sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
+        }
+    }
+}
+        stage('JUNIT-MOCKITO Tests'){
+            steps{
+                echo'laching units test ...'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit "**/target/surefire-reports/*.xml"
+                }
+            }
+        }
+
+        stage('Maven Compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+
+        stage('MVN SONARQUBE') {
+            steps {
+                script {
+                    sh "mvn sonar:sonar -Dsonar.login=squ_2bf48e91e6296c2a681ecb743886ae70229627a5"
+                }
+            }
+        }
+
+stage('Junit / Mockito') {
+    steps {
+        sh 'mvn test'
+    }
+}
+
+stage('Nexus Deployment') {
+
+    steps {
+        sh 'mvn deploy'
+    }
+}
+
+
+ 	stage('Build docker image'){
+               steps{
+                   script{
+                       sh 'docker build -t elemejri/kaddem-0.0.1 .'
+                   }
+               }
+           }
+   stage('Docker Login') {
+               steps {
+   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
+   			}
+   		}
+   	 stage('Push Docker Image to DockerHub') {
+                steps {
+   		    sh 'docker push elemejri/kaddem-0.0.1 '
+
+          	stage('Build and Start Docker Compose') {
+                 steps {
+                     sh 'docker compose build'
+                     sh 'docker compose up -d'
+     	    }	}
+stage('Start Grafana') {
+    steps {
+        sh 'docker run -d -p 4004:3000 grafana/grafana'
+    }
+}
+
+
+stage('Start Prometheus') {
+    steps {
+        sh 'docker run -d -p 9095:9090 prom/prometheus'
+    }
+}
+
+    }
+}
+
+
+
+
+
+
+
+
+    }
+}
