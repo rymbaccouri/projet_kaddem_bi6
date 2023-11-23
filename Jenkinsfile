@@ -1,95 +1,159 @@
 pipeline {
     agent any
-
+    environment {
+        PROJECT_DIR = '5BI6-G2-Kaddem'
+    }
     stages {
-        /*stage('Git : Source Code Checkout') {
+        
+        stage("GIT") {
             steps {
-                echo 'Pulling... '
-                git branch: 'gestionContracts',
-                url: 'https://github.com/rymbaccouri/projet_kaddem_bi6.git'
+                script {
+                    if (!fileExists(env.PROJECT_DIR)) {
+                        sh "git clone -b gestionContracts https://elemejri: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@github.com/rymbaccouri/projet_kaddem_bi6.git ${env.PROJECT_DIR}"
+                    } else {
+                        echo "Le répertoire '${env.PROJECT_DIR}' existe déjà. Mise à jour en cours..."
+                        dir(env.PROJECT_DIR) {
+                            sh "git checkout gestionContracts"
+                            sh "git pull origin gestionContracts"
+                            sh 'mvn clean compile'
+                        }
+                    }
+                }
             }
-        }*/
+        }
 
         stage('Clean Project with Maven') {
             steps {
-
-                sh 'mvn clean'
+                dir(env.PROJECT_DIR) {
+                    sh 'mvn clean'
+                }
             }
         }
 
         stage('Compile Project with Maven') {
             steps {
-
-                sh 'mvn compile'
-            }
-        }
-        stage('MVN SONARQUBE Analysis') {
-    steps {
-        // Étape pour compiler le projet avec Maven
-        script {
-
-
-            sh "mvn sonar:sonar -Dsonar.login=squ_a4abaef8a29df38d4222c56cd08699b264ff1b80"
-        }
-    }
-}
-        stage('JUNIT-MOCKITO Tests'){
-            steps{
-                echo'laching units test ...'
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit "**/target/surefire-reports/*.xml"
+                dir(env.PROJECT_DIR) {
+                    sh 'mvn compile'
                 }
             }
         }
-stage('Nexus Repository Deployment') {
-    steps {
-        sh 'mvn deploy'
+
+        stage('MVN SONARQUBE Analysis') {
+            steps {
+        // Étape pour compiler le projet avec Maven
+                script {
+                    dir(env.PROJECT_DIR) {
+                        sh 'mvn clean package sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar -Dmaven.test.skip=true'
+                    }
+        }
     }
-}
+        }
+        stage('JUNIT-MOCKITO Tests'){
+            steps{
+                dir(env.PROJECT_DIR){
+                echo'laching units test ...'
+                sh 'mvn test'                
+                }
+            }
+            post {
+                always {
+                    dir(env.PROJECT_DIR) {
+                        junit '**/target/surefire-reports/*.xml'
+                    }
+                }
+            }
+        }
 
+           stage('Nexus') {
+            steps {
+                dir(env.PROJECT_DIR) {
+                    script{
+                    artifactPath = "target/kaddem-0.0.1.jar";
 
- 	stage('Build docker image'){
-               steps{
-                   script{
-                       sh 'docker build -t elemejri/kaddem-0.0.1 .'
-                   }
-               }
+                    nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: 'http',
+                            nexusUrl: 'localhost:8081',
+                            groupId: 'tn.esprit',
+                            version: '1.0',
+                            repository: 'maven-releases',
+                            credentialsId: 'nexus-credentials',
+                            artifacts: [
+                                    [artifactId: 'kaddem',
+                                     classifier: '',
+                                     file      : artifactPath,
+                                     type      : 'jar']
+                            ]
+                    );
+                    }
+                }
+            }
            }
-   stage('Docker Login') {
-               steps {
-   				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u="elemejri" -p="dockerhub" '
-   			}
-   		}
-   	 stage('Push Docker Image to DockerHub') {
-                steps {
-   		    sh 'docker push elemejri/kaddem-0.0.1 '
-   			}
-   	    post {
-   		always {
 
-   			sh 'docker logout'
-   		}
-           	}
-     }
-          	stage('Build and Start Docker Compose') {
-                 steps {
-                     sh 'docker compose build'
-                     sh 'docker compose up -d'
-     	    }	}
-stage('Start Grafana') {
-    steps {
-        sh 'docker run -d -p 4005:3000 grafana/grafana'
-    }
-}
+        stage('Build Docker Image') {
+            steps {
+                dir(env.PROJECT_DIR) {
+                echo 'Building the Docker image...'
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PWD')]) {
+                        sh "echo $PWD | docker login -u $USER --password-stdin"
+                        sh "docker build -t elemejri/kaddem:1.0 ."
+                        }
+                }
+            }
+        }
 
-stage('Start Prometheus') {
-    steps {
-        sh 'docker run -d -p 9096:9090 prom/prometheus'
-    }
-}
+        stage('Upload to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PWD')]) {
+                                        sh "echo $PWD | docker login -u $USER --password-stdin"
+                                        sh "docker push elemejri/kaddem:1.0"
+                }
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                echo 'Running Docker Compose...'
+                sh 'docker compose -f /var/lib/jenkins/workspace/examen_devops/5BI6-G5-Kaddem/docker-compose.yml up -d'
+            }
+        }
+
+
+  stage('Check and Start Prometheus') {
+            steps {
+                script {
+                    def containerRunning = sh(script: "docker ps --format '{{.Names}}' | grep prometheus", returnStatus: true)
+
+                    if (containerRunning != 0) {
+                        echo "Container does not exist. Starting Prometheus container..."
+                        sh "docker run -d -p 9090:9090 --name prometheus prom/prometheus"
+                    } else {
+                        echo "Container already exists. Skipping container creation."
+                        sh "docker start prometheus"
+                    }
+                }
+            }
+        }
+    
+
+
+  stage('Check and Start Grafana') {
+            steps {
+                script {
+                    def containerRunning = sh(script: "docker ps --format '{{.Names}}' | grep grafana", returnStatus: true)
+
+                    if (containerRunning != 0) {
+                        echo "Container does not exist. Starting Grafana container..."
+                        sh "docker run -d -p 3000:3000 --name grafana grafana/grafana"
+                    } else {
+                        echo "Container already exists. Skipping container creation."
+                        sh "docker start grafana"
+                    }
+                }
+            }
+        }
+    
+
         stage('Email Notification') {
             steps {
                 script {
@@ -98,5 +162,10 @@ Thanks,''', cc: '', from: '', replyTo: '', subject: 'Email Notification', to: 'm
                 }
             }
         }
-    }
+        
+        
+              }
 }
+
+
+    
